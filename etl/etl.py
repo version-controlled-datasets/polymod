@@ -98,6 +98,5 @@ df['age'] = np.select(criteria, labels, 0)
 
 df = wrangle.col_to_multilabel(df, 'age', extended_colname=True)
 df['age_years'] = age
-df['new'] = 888
 
 df.to_csv('data/polymod_social_contact_data.csv', index=False)

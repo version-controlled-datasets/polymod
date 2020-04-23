@@ -26,4 +26,9 @@ jobs:
         pip install numpy
     - name: Run
       run: |
-        ls
+        python etl/etl.py
+    - name: Deploy
+        git checkout -b "auto_update_from_etl"
+        git add --all
+        git commit -m "update data based on ETL change"
+        git push --set-upstream origin auto_update_from_etl

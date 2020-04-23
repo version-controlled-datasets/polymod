@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Modified Data
 
 on:
   pull_request:

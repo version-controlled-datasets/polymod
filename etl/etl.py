@@ -1,5 +1,6 @@
 import wrangle
 import pandas as pd
+import numpy as np
 
 # define the urls for data
 base_url = 'https://zenodo.org/record/1215899/files/2008_Mossong_POLYMOD_'

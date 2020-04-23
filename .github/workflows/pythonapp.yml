@@ -38,3 +38,10 @@ jobs:
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GIT_TOKEN }}
+        branch: auto_update_from_etl
+    - name: pull-request-action
+      uses: vsoch/pull-request-action@1.0.6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        BRANCH_PREFIX: "auto_update_from_etl"
+        PULL_REQUEST_BRANCH: "master"

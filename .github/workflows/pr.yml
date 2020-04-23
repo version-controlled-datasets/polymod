@@ -1,4 +1,4 @@
-name: PR
+name: Push ETL Changes
 
 on: [push]
 

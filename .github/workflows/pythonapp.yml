@@ -27,11 +27,14 @@ jobs:
     - name: Run
       run: |
         python etl/etl.py
-    - name: Deploy
+    - name: Make Changes
       run: |
         git config --global user.email mailme@mikkokotila.com
         git config --global user.name "Mikko Kotila"
         git checkout -b "auto_update_from_etl"
         git add --all
         git commit -m "update data based on ETL change"
-        git push --set-upstream origin auto_update_from_etl
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GIT_TOKEN }}

@@ -31,6 +31,7 @@ jobs:
       run: |
         git config --global user.email mailme@mikkokotila.com
         git config --global user.name "Mikko Kotila"
+        git pull
         git checkout -b "auto_update_from_etl"
         git add --all
         git commit -m "update data based on ETL change"

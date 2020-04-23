@@ -1,37 +1,29 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+name: Build
 
-name: Python application
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push]
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    name: Python ${{ matrix.python-version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.7]
+        os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
+    - uses: actions/checkout@v1
+    - name: Python ${{ matrix.python-version }}
       uses: actions/setup-python@v1
       with:
-        python-version: 3.8
-    - name: Install dependencies
+        python-version: ${{ matrix.python-version }}
+    - name: Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Lint with flake8
+        pip install pandas
+        pip install wrangle
+        pip install numpy
+    - name: Run
       run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pip install pytest
-        pytest
+        ls

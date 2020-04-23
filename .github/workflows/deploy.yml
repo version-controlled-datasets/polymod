@@ -1,0 +1,51 @@
+name: Deploy
+
+on:
+  pull_request:
+    types: [closed] 
+
+jobs:
+  build:
+    name: Python ${{ matrix.python-version }} and ${{ matrix.os }}
+    if: github.event.pull_request.merged == true
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 1
+      matrix:
+        python-version: [3.7]
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas
+        pip install wrangle
+        pip install numpy
+    - name: Run
+      run: |
+        python etl/etl.py
+    - name: Make Changes
+      run: |
+        git config --global user.email mailme@mikkokotila.com
+        git config --global user.name "Mikko Kotila"
+        git checkout -b "auto_update_from_etl"
+        git add --all
+        git commit -m "update data based on ETL change"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GIT_TOKEN }}
+        branch: auto_update_from_etl
+    - name: pull-request-action
+      uses: vsoch/pull-request-action@1.0.6
+      env:
+        GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        BRANCH_PREFIX: "auto_update_"
+        PULL_REQUEST_BRANCH: "master"
+        PULL_REQUEST_FROM_BRANCH: "auto_update_from_etl"

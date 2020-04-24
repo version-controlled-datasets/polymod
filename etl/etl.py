@@ -95,8 +95,7 @@ df['contact_age_50_67'] = df.contact_age.between(50, 67).astype(int)
 df['contact_age_67_150'] = df.contact_age.between(67, 150).astype(int)
 
 # final cleanup
-_drop_cols_ = ['participant_id',
-               'contact_age',
+_drop_cols_ = ['contact_age',
                'part_age',
                'age_group',
                'age_group',

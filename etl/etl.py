@@ -1,6 +1,5 @@
 import wrangle
 import pandas as pd
-import numpy as np
 
 # define the urls for data
 base_url = 'https://zenodo.org/record/1215899/files/2008_Mossong_POLYMOD_'
@@ -25,15 +24,15 @@ df_participant_temp = df_participant_common.merge(df_participant_extra, on='part
 df = df_contact_common.merge(df_participant_temp, on='part_id')
 df = df.merge(household_lookup, on='part_id')
 
-# use estimated age for missing age values
+# use estimated age for missing contact age values
 estimated_age = (df.cnt_age_est_min + df.cnt_age_est_max) / 2
 estimated_age = estimated_age.fillna(0).astype(int)
-df['age'] = (df.cnt_age_exact.fillna(0) + estimated_age).astype(int)
+df['contact_age'] = (df.cnt_age_exact.fillna(0) + estimated_age).astype(int)
 
 # keep these cols
 cols = ['part_id',
         'part_gender',
-        'age',
+        'contact_age',
         'part_age',
         'country',
         'hh_size',
@@ -52,11 +51,11 @@ df = wrangle.col_to_multilabel(df, 'part_gender')
 df = wrangle.col_to_multilabel(df, 'country')
 
 # drop redundant columns
-df.drop(['cnt_gender'],1, inplace=True)
+df.drop(['cnt_gender'], 1, inplace=True)
 
 # use these column names instead
 cols = ['participant_id',
-        'age',
+        'contact_age',
         'age_group',
         'household_size',
         'contact_home',
@@ -78,27 +77,33 @@ cols = ['participant_id',
 
 # wrap up
 df.columns = cols
-df.drop('age_group', 1, inplace=True)
+_age_temp_ = df_participant_common[['part_id', 'part_age']]
+df = df.merge(_age_temp_, left_on='participant_id', right_on='part_id')
+
+# create age groups for participant
+df['age_0_15'] = df.part_age.between(0, 15).astype(int)
+df['age_15_35'] = df.part_age.between(15, 35).astype(int)
+df['age_35_50'] = df.part_age.between(35, 50).astype(int)
+df['age_50_67'] = df.part_age.between(50, 67).astype(int)
+df['age_67_150'] = df.part_age.between(67, 150).astype(int)
+
+# create age groups for contact
+df['contact_age_0_15'] = df.contact_age.between(0, 15).astype(int)
+df['contact_age_15_35'] = df.contact_age.between(15, 35).astype(int)
+df['contact_age_35_50'] = df.contact_age.between(35, 50).astype(int)
+df['contact_age_50_67'] = df.contact_age.between(50, 67).astype(int)
+df['contact_age_67_150'] = df.contact_age.between(67, 150).astype(int)
+
+# final cleanup
+_drop_cols_ = ['participant_id',
+               'contact_age',
+               'part_age',
+               'age_group',
+               'age_group',
+               'part_id']
+
+df.drop(_drop_cols_, 1, inplace=True)
 df = df.dropna()
 df = df.astype(int)
 
-# UPDATES
-
-criteria = [df['age'].between(0, 15),
-            df['age'].between(15, 70),
-            df['age'].between(70, 99)]
-
-labels = ['young',
-          'adult',
-          'elderly']
-
-age = df.age.values
-
-df['age'] = np.select(criteria, labels, 0)
-
-df = wrangle.col_to_multilabel(df, 'age', extended_colname=True)
-df['age_years'] = age
-
-df['new2'] = 0
-
-df.to_csv('data/polymod_social_contact_data.csv', index=False)
+df.to_csv('polymod_social_contact_data.csv', index=False)

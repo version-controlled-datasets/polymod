@@ -29,7 +29,8 @@ jobs:
         pip install numpy
     - name: Run
       run: |
-        python etl/etl.py
+        cd data
+        python ../etl/etl.py
     - name: Make Changes
       run: |
         git config --global user.email mailme@mikkokotila.com

@@ -80,26 +80,13 @@ df.columns = cols
 _age_temp_ = df_participant_common[['part_id', 'part_age']]
 df = df.merge(_age_temp_, left_on='participant_id', right_on='part_id')
 
-# create age groups for participant
-df['age_0_15'] = df.part_age.between(0, 15).astype(int)
-df['age_15_35'] = df.part_age.between(15, 35).astype(int)
-df['age_35_50'] = df.part_age.between(35, 50).astype(int)
-df['age_50_67'] = df.part_age.between(50, 67).astype(int)
-df['age_67_150'] = df.part_age.between(67, 150).astype(int)
-
-# create age groups for contact
-df['contact_age_0_15'] = df.contact_age.between(0, 15).astype(int)
-df['contact_age_15_35'] = df.contact_age.between(15, 35).astype(int)
-df['contact_age_35_50'] = df.contact_age.between(35, 50).astype(int)
-df['contact_age_50_67'] = df.contact_age.between(50, 67).astype(int)
-df['contact_age_67_150'] = df.contact_age.between(67, 150).astype(int)
-
 # final cleanup
-_drop_cols_ = ['contact_age',
-               'part_age',
-               'age_group',
-               'age_group',
-               'part_id']
+
+_drop_cols_ = ['age_group', 'part_id']
+
+df = wrangle.col_move_place(df, 'part_age')
+df = wrangle.col_move_place(df, 'participant_id')
+df = wrangle.df_rename_col(df, 'part_age', 'participant_age')
 
 df.drop(_drop_cols_, 1, inplace=True)
 df = df.dropna()

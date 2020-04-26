@@ -2,6 +2,8 @@
 
 This repository is self-contained from original source to downloadable dataset with ETL already performed. ETL changes can be made through PRs, and once a PR pass tests and is merged, the dataset is reproduced. 
 
+A description of the dataset can be found [here](https://cordis.europa.eu/project/id/502084/reporting).
+
 The original datasource can be found [here](https://zenodo.org/record/1215899). 
 
 **SAMPLE SIZE:** 97,250

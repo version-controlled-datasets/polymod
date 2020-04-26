@@ -8,7 +8,7 @@ The original datasource can be found [here](https://zenodo.org/record/1215899).
 
 **SAMPLE SIZE:** 97,250
 
-**ETL**: Review it [here](https://github.com/version-controlled-datasets/polymod/tree/improve-readme/etl)
+**ETL**: Review it [here](https://github.com/version-controlled-datasets/polymod/blob/master/etl/etl.py)
 
 **FEATURES**
 

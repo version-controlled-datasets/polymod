@@ -1,6 +1,6 @@
 # POLYMOD | Social Contact Data
 
-This repository is self-contained from original source to downloadable dataset with ETL already performed. ETL changes can be made through PRs, and once a PR pass tests and is merged, the dataset is reproduced. 
+This repository is self-contained from original source to downloadable dataset with meaningful ETL already performed. ETL changes can be made through PRs, and once a PR pass tests and is merged, the dataset in this repository is reproduced from scratch. 
 
 A description of the dataset can be found [here](https://cordis.europa.eu/project/id/502084/reporting).
 
